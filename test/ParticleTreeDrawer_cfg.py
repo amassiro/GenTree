@@ -51,12 +51,36 @@ process.printTree = cms.EDAnalyzer("ParticleTreeDrawer",
                                    printVertex = cms.untracked.bool(False),
                                    printStatus = cms.untracked.bool(False),
                                    printIndex = cms.untracked.bool(False),
-                                   status = cms.untracked.vint32( 3 )
+                                   status = cms.untracked.vint32(1, 2, 3, 4)
                                    )
 
+process.load("SimGeneral.HepPDTESSource.pythiapdt_cfi")
+process.printDecay = cms.EDAnalyzer("ParticleDecayDrawer",
+    #src = cms.InputTag("genParticles"),
+    src = cms.InputTag("prunedGenParticles"), 
+    printP4 = cms.untracked.bool(False),
+    printPtEtaPhi = cms.untracked.bool(False),
+    printVertex = cms.untracked.bool(False)
+  )
+
+process.load("SimGeneral.HepPDTESSource.pythiapdt_cfi")
+process.printListTree = cms.EDAnalyzer("ParticleListDrawer",
+  maxEventsToPrint = cms.untracked.int32(20),
+  printVertex = cms.untracked.bool(False),
+  printOnlyHardInteraction = cms.untracked.bool(False), # Print only status=3 particles. This will not work for Pythia8, which does not have any such particles.
+  src = cms.InputTag("prunedGenParticles")
+  #src = cms.InputTag("genParticles")
+)
 
 
-process.p = cms.Path(process.printTree)
+
+
+process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(options.maxEvents) )
+
+
+
+#process.p = cms.Path(process.printTree * process.printDecay * process.printListTree)
+process.p = cms.Path(process.printListTree)
 
 
 
