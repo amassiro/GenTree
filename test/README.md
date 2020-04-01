@@ -132,7 +132,12 @@ Example output:
     
     
     
-    
+Decay chain draw:
+
+    cmsRun ParticleTreeDrawer_cfg.py   inputFiles=many::samples_petrucciani_MG.py  \
+                                       outputFile=/tmp/amassiro/test.root
+                              
+                              
     
     
 
